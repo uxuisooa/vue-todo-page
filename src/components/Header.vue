@@ -24,7 +24,10 @@ export default {
   methods: {
     handleInput (event) {
       if (event.keyCode === 13) {
+        if (!this.text) return; //공백일떄는 엔터를 쳐도 아무것도 안나오게
+
         this.$emit("addTodo", this.text);
+        this.text = ""; //입력을 한 후, 공백으로 바꾸기
       };
     }
   }

@@ -2,7 +2,7 @@
   <div id="app">
     <section class="todoapp">
       <Header @addTodo="addTodo"/>
-      <Body :todos="todos"/>
+      <Body :todos="todos" @updateDone="updateDone"/>
       <Footer/>
     </section>
   </div>
@@ -36,6 +36,15 @@ export default {
         },
         ...this.todos
       ];
+    },
+    updateDone(id) { //구분할 값은 id로 받음
+      const currentTodos = [...this.todos];
+      const todo = currentTodos.find((todo) => todo.id ===  id) //넘겨받은 id가 있는지 찾음
+      
+      if (todo){ //검색된 애가 있으면 트루 없으면 펄스
+        todo.isDone = !todo.isDone;
+        this.todos = currentTodos;
+      }
     }
   }
 };
