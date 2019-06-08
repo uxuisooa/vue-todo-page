@@ -10,7 +10,7 @@
       @keypress="handleInput"
     >
     <!-- input과   return{text: "" }를-->
-    {{ text }}
+    <!-- {{ text }} -->
   </header>
 </template>
 
