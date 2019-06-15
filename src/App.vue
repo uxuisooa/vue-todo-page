@@ -2,8 +2,8 @@
   <div id="app">
     <section class="todoapp">
       <Header @addTodo="addTodo"/>
-      <Body :todos="todos" @updateDone="updateDone"/>
-      <Footer/>
+      <Body :todos="filtedTodos" @updateDone="updateDone" @removeTodo="removeTodo" @updateTodo="updateTodo"/>
+      <Footer :size="size" :filterType="filterType" @onChangeFilter="handelFilterType"/>
     </section>
   </div>
 </template>
@@ -23,14 +23,36 @@ export default {
   },
   data() {
     return{
-      todos: []
+      todos: [],
+      filterType: "All"
     };
+  },
+  computed: {
+    filtedTodos(){
+      switch(this.filterType) {
+        case 'All': {
+          return this.todos;
+        }
+        case 'Active': {
+          return this.todos.filter(todo => !todo.isDone);
+        }
+        case 'Completed': {
+          return this.todos.filter(todo => !todo.isDone);
+        }
+        default: {
+          return this.todos;
+        }
+      }
+    },
+    size () {
+      return this.filtedTodos.length;
+    }
   },
   methods:{
     addTodo (text) {
       this.todos = [
         {
-          id: new Date(),
+          id: new Date().getTime(),
           text,
           isDone: false
         },
@@ -45,6 +67,21 @@ export default {
         todo.isDone = !todo.isDone;
         this.todos = currentTodos;
       }
+    },
+    removeTodo(id) {
+      this.todos = this.todos.filter(todo => todo.id !== id)
+    },
+    updateTodo({ id, text}){
+      const currentTodos = [...this.todos];
+      const todo = currentTodos.find((todo) => todo.id ===  id)
+
+      if (todo){ 
+        todo.text = text;
+        this.todos = currentTodos;
+      }
+    },
+    handelFilterType(type){
+      this.filterType= type;
     }
   }
 };

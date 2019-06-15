@@ -2,29 +2,61 @@
   <section class="main">
     <ul class="todo-list">
       <li 
-        v-for="({ id, text, isDone }, idx) in todos" 
-        :class="{ todo: true, completed: isDone }"       
-        :key="idx"
+        v-for="({ id, text, isDone }) in todos" 
+        :class="{ todo: true, completed: isDone, editing: id === edit.id }"       
+        :key="id"
       >
         <div class="view">
           <input class="toggle" type="checkbox" :checked="isDone" @click="handleDone(id)"> <!-- id를 넘겨 받음 -->
-          <label>{{ text }}</label>
-          <button class="destroy"></button>
+          <label @dblclick="initializeEdit({id, text})">{{ text }}</label>
+          <button class="destroy" @click="handleRemove(id)"></button>
         </div>
-        <input class="edit" type="text">
+        <input ref="edit" class="edit" type="text" v-model="edit.text" @keypress="handleEditText">
       </li>
     </ul>
   </section>
 </template>
 
 <script>
+
 export default {
   props:{
     todos: {type : Array, default: () => [] }
   },
+  data () {//가상공간
+    return {
+      edit: {
+        id: -1,
+        text: ""
+      }
+    }
+  },
   methods:{
     handleDone(id){
       this.$emit("updateDone", id);
+    },
+    handleRemove(id){
+      console.log('asass')
+      this.$emit("removeTodo", id);
+    },
+    initializeEdit({ id, text }){
+      //console.log("db click",id, text);
+      this.edit = {
+        id,
+        text
+      }
+    },
+    handleEditText({ keyCode }) {
+      if (keyCode === 13 ) {
+       this.$emit("updateTodo", this.edit);
+       this.cansleEdit();
+      }
+    },
+    cansleEdit () {
+      this.edit = {
+        id: -1,
+        text: ""
+      }
     }
   }
 };

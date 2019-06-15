@@ -9,7 +9,7 @@
       placeholder="What needs to be done?"
       @keypress="handleInput"
     >
-    <!-- input과   return{text: "" }를-->
+    <!-- input과  return{text: "" }를-->
     <!-- {{ text }} -->
   </header>
 </template>
@@ -28,7 +28,7 @@ export default {
 
         this.$emit("addTodo", this.text);
         this.text = ""; //입력을 한 후, 공백으로 바꾸기
-      };
+      }
     }
   }
 };
